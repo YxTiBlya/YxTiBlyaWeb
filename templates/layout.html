@@ -1,0 +1,88 @@
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='img/icon.png') }}" type="image/png">
+
+    <title>{% block title %}{% endblock %}</title>
+</head>
+<body>
+    <div class="bck"></div>
+    <div class="nav">
+        <div class="container">
+            <div class="name">
+                <a href="https://github.com/YxTiBlya/YxTiBlyaWeb" target="_blank"><h3>YxTiBlyaWeb in GitHub</h3></a>
+            </div>
+            
+            <div class="rightblock"> 
+                <label class="switch">
+                    <input type="checkbox" checked class="checkboxjs">
+                    <span class="slider round"></span>
+                </label>
+                <a href="/home" class="linelink">Home</a>
+                <a href="/contacts" class="linelink">Contacts</a>
+            </div>
+        </div>
+    </div>
+    
+    <main>
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    <footer>
+        <div class="githubfield">
+            <a href="https://github.com/YxTiBlya?tab=repositories" target="_blank"><h3>GitHub</h3><h3>https://github.com/YxTiBlya?tab=repositories</h3></a>
+        </div>
+    </footer>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+
+    <script type="module">
+        import "https://cdn.jsdelivr.net/npm/js-cookie@3.0.1/dist/js.cookie.min.js";
+        const btn = document.querySelector(".checkboxjs");
+        const plate = document.querySelectorAll(".plate");
+        let image = document.querySelector('.bck');
+        const srcw = 'url("{{ url_for("static", filename="img/XRAM.JPG") }}")';
+        const srcb = 'url("{{ url_for("static", filename="img/3.JPG") }}")';
+        let loc = window.location.pathname;
+        
+        //Cookies.remove('last_image')
+        //console.log(Cookies.get('last_image'))
+
+        if(typeof Cookies.get('last_image') == 'undefined'){
+            console.log('не найден кук')
+            image.style.backgroundImage = srcb;
+            Cookies.set('last_image', image.style.backgroundImage, { expires: 7, path: '/' });
+        }
+        else{
+            image.style.backgroundImage = Cookies.get('last_image');
+        }
+
+        if(loc.indexOf("/contacts/") != -1){
+            btn.addEventListener('click', function() {
+                if(image.style.backgroundImage == srcb){image.style.backgroundImage = srcw;}
+                else{image.style.backgroundImage = srcb;}
+                Cookies.set('last_image', image.style.backgroundImage, { expires: 7, path: '/' });
+            })
+        }
+        else{
+            if(Cookies.get('last_image').indexOf('XRAM') >= 0){
+                for(var i=0; i<3; i++){
+                    plate[i].classList.toggle('platebl'); 
+                }
+            }
+            btn.addEventListener('click', function() {
+                for(var i=0; i<3; i++){
+                    plate[i].classList.toggle('platebl'); 
+                }
+
+                if(image.style.backgroundImage == srcb){image.style.backgroundImage = srcw;}
+                else{image.style.backgroundImage = srcb;}
+                Cookies.set('last_image', image.style.backgroundImage, { expires: 7, path: '/' });
+            })
+        }
+    </script>
+</body>
+</html>
